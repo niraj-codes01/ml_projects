@@ -37,18 +37,60 @@ class ModelTrainer:
             )
 
             models = {
-                "RandomForest":RandomForestRegressor(),
+                "Linear Regression": LinearRegression(),
+                "K-Neighbors Regressor": KNeighborsRegressor(),
                 "Decision Tree": DecisionTreeRegressor(),
-                "Gradient Boosting":GradientBoostingRegressor(),
-                "Linear Regression":LinearRegression(),
-                "K-Neighbors Regressor":KNeighborsRegressor(),
-                "XBRegressor":XGBRegressor(),
-                "Cat Boosting Regressor": CatBoostRegressor(verbose=False),
-                "AdaBoost Regressor": AdaBoostRegressor()
+                "Random Forest": RandomForestRegressor(),
+                "Gradient Boosting": GradientBoostingRegressor(),
+                "AdaBoost": AdaBoostRegressor(),
+                "XGBoost": XGBRegressor(),
+                "CatBoost": CatBoostRegressor(verbose=False)
+            }
+
+
+            params = {
+
+                "Linear Regression": {"fit_intercept": [True, False]},
+
+                "K-Neighbors Regressor": {
+                    "n_neighbors": [3, 5, 7, 9, 11]
+                },
+
+                "Decision Tree": {
+                    "criterion": ["squared_error", "friedman_mse"]
+                },
+
+                "Random Forest": {
+                    "n_estimators": [8,16,32,64]
+                },
+
+                "Gradient Boosting": {
+                    "n_estimators": [8,16,32,64],
+                    "learning_rate": [0.01, 0.1],
+                    "subsample": [0.8, 1.0]
+                },
+
+                "AdaBoost": {
+                    "n_estimators": [8,16,32,64],
+                    "learning_rate": [0.01, 0.1, 1.0],
+                    #"loss": ["linear", "square"]
+                },
+
+                "XGBoost": {
+                    "n_estimators": [8,16,32,64],
+                    "learning_rate": [0.01, 0.1]
+                },
+
+                "CatBoost": {
+                    "iterations": [100, 200],
+                    "learning_rate": [0.01, 0.1],
+                    "depth": [4, 6, 8],
+                    #"l2_leaf_reg": [1, 3, 5]
+                }
             }
 
             model_report :dict=evaluate_models(X_train=X_train,y_train=y_train,
-                                              X_test=X_test,y_test=y_test,models=models)
+                                              X_test=X_test,y_test=y_test,models=models,params=params)
             
             ##To get best model score from dict
             best_model_score=max(sorted(model_report.values()))
